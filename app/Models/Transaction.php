@@ -221,6 +221,12 @@ class Transaction extends Model
         $parts->load('splitSiblings:'.self::SPLIT_SIBLING_COLUMNS);
     }
 
+    /** @return HasMany<TransactionAttachment, $this> */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(TransactionAttachment::class);
+    }
+
     /**
      * A transaction always lives in its account's space (the account is the
      * tenant anchor), so bank-sync inserts land in the right space regardless of
