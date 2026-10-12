@@ -52,6 +52,14 @@ class BudgetController extends Controller
         return Inertia::render('budgets/index', [
             'budgets' => $budgets,
             'savingsGoals' => SavingsGoal::withStatsForUser($user),
+            'scheduledTransactions' => $user->scheduledTransactions()
+                ->pending()
+                ->with(['account.bank', 'category'])
+                ->orderBy('next_due_date')
+                ->orderBy('description')
+                ->get(),
+            'accounts' => $user->accounts()->with('bank')->orderBy('name')->get(),
+            'categories' => Category::query()->where('user_id', $user->id)->forDisplay()->get(),
             'currencyCode' => $user->currency_code ?? 'USD',
         ]);
     }
