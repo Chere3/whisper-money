@@ -8,6 +8,7 @@ use App\Http\Controllers\Ai\AiConsentController;
 use App\Http\Controllers\Ai\CategorizationController;
 use App\Http\Controllers\Ai\RuleSuggestionController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\BudgetCategoryLimitController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\ComparisonController;
@@ -331,6 +332,7 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
     Route::patch('budgets/{budget}', [BudgetController::class, 'update'])->name('budgets.update');
     Route::delete('budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
     Route::post('budgets/{budget}/archive', [BudgetController::class, 'archive'])->name('budgets.archive');
+    Route::patch('budgets/{budget}/category-limits', [BudgetCategoryLimitController::class, 'update'])->name('budgets.category-limits.update');
     Route::patch('planning/reorder', [BudgetController::class, 'reorder'])->name('planning.reorder');
 
     Route::post('scheduled-transactions', [ScheduledTransactionController::class, 'store'])->name('scheduled-transactions.store');

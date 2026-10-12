@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\Label;
 use App\Models\SavingsGoal;
 use App\Models\Transaction;
+use App\Services\BudgetCategoryLimitService;
 use App\Services\BudgetPeriodService;
 use App\Services\BudgetService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -28,6 +29,7 @@ class BudgetController extends Controller
     public function __construct(
         protected BudgetPeriodService $budgetPeriodService,
         protected BudgetService $budgetService,
+        protected BudgetCategoryLimitService $categoryLimits,
     ) {}
 
     public function index(Request $request): Response
@@ -143,6 +145,7 @@ class BudgetController extends Controller
             'currentPeriod' => $viewedPeriod,
             'previousPeriod' => $previousPeriod,
             'nextPeriod' => $nextPeriod,
+            'categoryLimits' => $this->categoryLimits->breakdown($budget, $viewedPeriod),
             'categories' => $categories,
             'accounts' => $accounts,
             'banks' => $banks,
