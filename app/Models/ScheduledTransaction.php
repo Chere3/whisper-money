@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $anchor_day
  * @property ?CarbonInterface $end_date
  * @property ?CarbonInterface $completed_at
+ * @property bool $auto_pay
+ * @property ?CarbonInterface $reminded_for
  */
 class ScheduledTransaction extends Model
 {
@@ -50,12 +52,15 @@ class ScheduledTransaction extends Model
         'anchor_day',
         'end_date',
         'completed_at',
+        'auto_pay',
+        'reminded_for',
     ];
 
     /** @var list<string> */
     protected $hidden = [
         'space_id',
         'anchor_day',
+        'reminded_for',
     ];
 
     protected function casts(): array
@@ -67,6 +72,8 @@ class ScheduledTransaction extends Model
             'next_due_date' => 'date:Y-m-d',
             'end_date' => 'date:Y-m-d',
             'completed_at' => 'datetime',
+            'auto_pay' => 'boolean',
+            'reminded_for' => 'date:Y-m-d',
         ];
     }
 

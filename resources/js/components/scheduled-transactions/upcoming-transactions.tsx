@@ -239,6 +239,7 @@ function ScheduledRow({
                         {scheduled.account
                             ? ` · ${scheduled.account.name}`
                             : ''}
+                        {scheduled.auto_pay ? ` · ${__('Automatic')}` : ''}
                     </span>
                 </div>
             </div>

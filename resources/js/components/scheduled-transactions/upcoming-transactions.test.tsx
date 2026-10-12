@@ -78,6 +78,7 @@ function scheduled(
         frequency: 'monthly',
         next_due_date: '2026-03-20',
         end_date: null,
+        auto_pay: false,
         account: checking,
         category: null,
         ...overrides,
@@ -170,6 +171,12 @@ describe('UpcomingTransactions', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Mark as paid' }));
 
         expect(screen.getByRole('button', { name: 'Skip' })).toBeDisabled();
+    });
+
+    it('says which schedules record themselves', () => {
+        renderSection([scheduled({ auto_pay: true })]);
+
+        expect(screen.getByText(/Automatic/)).toBeInTheDocument();
     });
 
     it('words the action for an income as received', () => {

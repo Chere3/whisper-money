@@ -40,6 +40,11 @@ class ScheduledTransactionFactory extends Factory
         return $this->state(['frequency' => ScheduleFrequency::Once]);
     }
 
+    public function autoPay(): static
+    {
+        return $this->state(['auto_pay' => true]);
+    }
+
     public function completed(): static
     {
         return $this->state(['completed_at' => now()]);

@@ -6,6 +6,7 @@ import InputError from '@/components/input-error';
 import { CategorySelect } from '@/components/transactions/category-select';
 import { AmountInput } from '@/components/ui/amount-input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogContent,
@@ -56,6 +57,7 @@ interface FormState {
     nextDueDate: string;
     endDate: string;
     notes: string;
+    autoPay: boolean;
 }
 
 function initialState(
@@ -72,6 +74,7 @@ function initialState(
         nextDueDate: scheduled?.next_due_date ?? todayDateString(),
         endDate: scheduled?.end_date ?? '',
         notes: scheduled?.notes ?? '',
+        autoPay: scheduled?.auto_pay ?? false,
     };
 }
 
@@ -132,6 +135,7 @@ export function ScheduledTransactionDialog({
                 frequency: form.frequency,
                 next_due_date: form.nextDueDate,
                 end_date: repeats && form.endDate ? form.endDate : null,
+                auto_pay: form.autoPay,
             },
             preserveScroll: true,
             onSuccess: () => onOpenChange(false),
@@ -349,6 +353,27 @@ export function ScheduledTransactionDialog({
                                 value={form.notes}
                                 onChange={(e) => set('notes', e.target.value)}
                             />
+                        </div>
+
+                        <div className="flex items-start gap-2">
+                            <Checkbox
+                                id="scheduled-auto-pay"
+                                className="mt-0.5"
+                                checked={form.autoPay}
+                                onCheckedChange={(checked) =>
+                                    set('autoPay', checked === true)
+                                }
+                            />
+                            <div className="space-y-1">
+                                <Label htmlFor="scheduled-auto-pay">
+                                    {__('Record it automatically')}
+                                </Label>
+                                <p className="text-sm text-muted-foreground">
+                                    {__(
+                                        'The transaction is created on the due date. Leave it off to get a reminder and mark it as paid yourself.',
+                                    )}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
