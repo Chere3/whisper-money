@@ -15,7 +15,7 @@ class DailySpendingService
     /**
      * Weeks the calendar shows, the current one included.
      */
-    public const WEEKS = 13;
+    private const WEEKS = 13;
 
     /**
      * Expense spending per day, for every day that had any.
