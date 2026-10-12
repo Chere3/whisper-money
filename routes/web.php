@@ -14,6 +14,7 @@ use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\ComparisonController;
 use App\Http\Controllers\CreditCardDetailController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\EmailUnsubscribeController;
 use App\Http\Controllers\IntegrationRequestController;
@@ -349,6 +350,11 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
     Route::delete('scheduled-transactions/{scheduledTransaction}', [ScheduledTransactionController::class, 'destroy'])->name('scheduled-transactions.destroy');
     Route::post('scheduled-transactions/{scheduledTransaction}/pay', [ScheduledTransactionController::class, 'pay'])->name('scheduled-transactions.pay');
     Route::post('scheduled-transactions/{scheduledTransaction}/skip', [ScheduledTransactionController::class, 'skip'])->name('scheduled-transactions.skip');
+
+    Route::post('debts', [DebtController::class, 'store'])->name('debts.store');
+    Route::put('debts/{debt}', [DebtController::class, 'update'])->name('debts.update');
+    Route::delete('debts/{debt}', [DebtController::class, 'destroy'])->name('debts.destroy');
+    Route::post('debts/{debt}/payments', [DebtController::class, 'recordPayment'])->name('debts.payments.store');
 
     Route::post('savings-goals', [SavingsGoalController::class, 'store'])->name('savings-goals.store');
     Route::get('savings-goals/{savingsGoal}', [SavingsGoalController::class, 'show'])->name('savings-goals.show');

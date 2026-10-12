@@ -4,6 +4,7 @@ import {
 } from '@/actions/App/Http/Controllers/BudgetController';
 import { BudgetListCard } from '@/components/budgets/budget-list-card';
 import { CreateBudgetDialog } from '@/components/budgets/create-budget-dialog';
+import { DebtsSection } from '@/components/debts/debts-section';
 import HeadingSmall from '@/components/heading-small';
 import { CreateSavingsGoalDialog } from '@/components/savings-goals/create-savings-goal-dialog';
 import { SavingsGoalListCard } from '@/components/savings-goals/savings-goal-list-card';
@@ -35,6 +36,7 @@ import { BreadcrumbItem } from '@/types';
 import { Account } from '@/types/account';
 import { Budget } from '@/types/budget';
 import { Category } from '@/types/category';
+import { Debt } from '@/types/debt';
 import { SavingsGoal } from '@/types/savings-goal';
 import { ScheduledTransaction } from '@/types/scheduled-transaction';
 import { __ } from '@/utils/i18n';
@@ -61,6 +63,7 @@ interface Props {
     budgets: Budget[];
     savingsGoals?: SavingsGoal[];
     scheduledTransactions?: ScheduledTransaction[];
+    debts?: Debt[];
     accounts?: Account[];
     categories?: Category[];
     currencyCode: string;
@@ -70,6 +73,7 @@ export default function BudgetsIndex({
     budgets,
     savingsGoals = [],
     scheduledTransactions = [],
+    debts = [],
     accounts = [],
     categories = [],
     currencyCode,
@@ -248,6 +252,8 @@ export default function BudgetsIndex({
                     accounts={accounts}
                     categories={categories}
                 />
+
+                <DebtsSection debts={debts} currencyCode={currencyCode} />
 
                 {archivedItems.length > 0 && (
                     <Collapsible

@@ -60,6 +60,13 @@ class BudgetController extends Controller
                 ->orderBy('next_due_date')
                 ->orderBy('description')
                 ->get(),
+            // Open debts first, oldest due date leading; settled ones trail.
+            'debts' => $user->debts()
+                ->orderByRaw('settled_at is not null')
+                ->orderByRaw('due_date is null')
+                ->orderBy('due_date')
+                ->orderBy('lent_on')
+                ->get(),
             'accounts' => $user->accounts()->with('bank')->orderBy('name')->get(),
             'categories' => Category::query()->where('user_id', $user->id)->forDisplay()->get(),
             'currencyCode' => $user->currency_code ?? 'USD',

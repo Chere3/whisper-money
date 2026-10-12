@@ -6,25 +6,11 @@ import {
 import HeadingSmall from '@/components/heading-small';
 import { ScheduledTransactionDialog } from '@/components/scheduled-transactions/scheduled-transaction-dialog';
 import { CategoryBadge } from '@/components/shared/category-combobox';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { ConfirmDeleteDialog } from '@/components/shared/confirm-delete-dialog';
+import { RowMenu } from '@/components/shared/row-menu';
 import { AmountDisplay } from '@/components/ui/amount-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useLocale } from '@/hooks/use-locale';
 import { Account, filterTransactionalAccounts } from '@/types/account';
 import { Category } from '@/types/category';
@@ -37,7 +23,7 @@ import {
 import { formatDate } from '@/utils/date';
 import { __ } from '@/utils/i18n';
 import { router } from '@inertiajs/react';
-import { CalendarClock, MoreHorizontal, Plus } from 'lucide-react';
+import { CalendarClock, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
@@ -148,35 +134,17 @@ export function UpcomingTransactions({
                 onOpenChange={(open) => !open && setDialog(null)}
             />
 
-            <AlertDialog
+            <ConfirmDeleteDialog
+                title={__('Delete scheduled transaction')}
+                description={__(
+                    'It will stop showing up as upcoming. Transactions you already recorded from it stay where they are.',
+                )}
                 open={dialog?.kind === 'delete'}
                 onOpenChange={(open) => !open && setDialog(null)}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {__('Delete scheduled transaction')}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {__(
-                                'It will stop showing up as upcoming. Transactions you already recorded from it stay where they are.',
-                            )}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{__('Cancel')}</AlertDialogCancel>
-                        <AlertDialogAction
-                            variant="destructive"
-                            onClick={() =>
-                                dialog?.kind === 'delete' &&
-                                handleDelete(dialog.scheduled)
-                            }
-                        >
-                            {__('Delete')}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+                onConfirm={() =>
+                    dialog?.kind === 'delete' && handleDelete(dialog.scheduled)
+                }
+            />
         </section>
     );
 }
@@ -265,28 +233,7 @@ function ScheduledRow({
                     >
                         {__('Skip')}
                     </Button>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                aria-label={__('More options')}
-                            >
-                                <MoreHorizontal className="size-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onSelect={onEdit}>
-                                {__('Edit')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                variant="destructive"
-                                onSelect={onDelete}
-                            >
-                                {__('Delete')}
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <RowMenu onEdit={onEdit} onDelete={onDelete} />
                 </div>
             </div>
         </li>
