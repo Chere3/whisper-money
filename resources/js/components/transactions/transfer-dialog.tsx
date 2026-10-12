@@ -120,7 +120,7 @@ export function TransferDialog({
                         </DialogTitle>
                         <DialogDescription>
                             {__(
-                                'Records the money leaving one account and arriving in the other as a linked pair.',
+                                'Money leaves one account and arrives in the other, recorded as a linked pair.',
                             )}
                         </DialogDescription>
                     </DialogHeader>
