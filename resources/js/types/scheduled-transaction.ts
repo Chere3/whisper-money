@@ -30,6 +30,8 @@ export interface ScheduledTransaction {
     frequency: ScheduleFrequency;
     next_due_date: string;
     end_date: string | null;
+    /** Records itself on the due date instead of waiting to be marked as paid. */
+    auto_pay: boolean;
     account?: Account;
     category?: Category | null;
 }

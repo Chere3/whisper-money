@@ -2975,5 +2975,10 @@
     "Schedule": "Programmer",
     "Schedule a transaction": "Programmer une transaction",
     "Upcoming": "À venir",
-    "e.g., Rent": "p. ex. Loyer"
+    "e.g., Rent": "p. ex. Loyer",
+    "Record it automatically": "L'enregistrer automatiquement",
+    "The transaction is created on the due date. Leave it off to get a reminder and mark it as paid yourself.": "La transaction est créée à l'échéance. Laissez décoché pour recevoir un rappel et la marquer comme payée vous-même.",
+    ":description is due": ":description arrive à échéance",
+    ":description is expected": ":description est attendu",
+    "Due :date": "Échéance le :date"
 }

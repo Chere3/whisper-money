@@ -3905,5 +3905,10 @@
     "Schedule": "Programar",
     "Schedule a transaction": "Programar una transacción",
     "Upcoming": "Próximas",
-    "e.g., Rent": "p. ej., Alquiler"
+    "e.g., Rent": "p. ej., Alquiler",
+    "Record it automatically": "Registrarla automáticamente",
+    "The transaction is created on the due date. Leave it off to get a reminder and mark it as paid yourself.": "La transacción se crea en la fecha de vencimiento. Déjalo desactivado para recibir un recordatorio y marcarla como pagada tú.",
+    ":description is due": ":description vence",
+    ":description is expected": ":description está por llegar",
+    "Due :date": "Vence el :date"
 }

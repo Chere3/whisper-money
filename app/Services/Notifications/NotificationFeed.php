@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\AchievementsWelcome;
 use App\Notifications\AchievementUnlocked;
 use App\Notifications\MonthlySummaryReady;
+use App\Notifications\ScheduledTransactionDue;
 use App\Services\Achievements\Catalog;
 use App\Services\Achievements\Presenter;
 use Carbon\Carbon;
@@ -168,6 +169,7 @@ class NotificationFeed
                 MonthlySummaryReady::class => $this->monthlySummaryRow($notification->data),
                 AchievementUnlocked::class => $this->achievementRow($notification->data),
                 AchievementsWelcome::class => $this->welcomeRow($notification->data),
+                ScheduledTransactionDue::class => $this->scheduledTransactionRow($notification->data),
                 default => [
                     'kind' => 'other',
                     'title' => class_basename($notification->type),
@@ -198,6 +200,27 @@ class NotificationFeed
             'title' => __('Your :month summary is ready', ['month' => $month]),
             'body' => $data['headline'] ?? null,
             'url' => route('monthly-summaries.show', $data['summary_id']),
+        ];
+    }
+
+    /**
+     * The description is the one frozen on the row: the schedule may have been
+     * renamed or deleted since, and the reminder is about what was due that day.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array{kind: string, title: string, body: ?string, url: string}
+     */
+    private function scheduledTransactionRow(array $data): array
+    {
+        $date = Carbon::parse($data['due_date'])->locale(app()->getLocale())->isoFormat('LL');
+
+        return [
+            'kind' => 'scheduled_transaction',
+            'title' => ($data['income'] ?? false)
+                ? __(':description is expected', ['description' => $data['description']])
+                : __(':description is due', ['description' => $data['description']]),
+            'body' => __('Due :date', ['date' => $date]),
+            'url' => route('budgets.index'),
         ];
     }
 

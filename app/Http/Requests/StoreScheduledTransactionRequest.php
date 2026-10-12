@@ -33,6 +33,7 @@ class StoreScheduledTransactionRequest extends FormRequest
             'frequency' => ['required', Rule::enum(ScheduleFrequency::class)],
             'next_due_date' => ['required', 'date_format:Y-m-d'],
             'end_date' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:next_due_date'],
+            'auto_pay' => ['sometimes', 'boolean'],
         ];
     }
 }

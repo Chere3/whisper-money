@@ -8,9 +8,10 @@ import { __ } from '@/utils/i18n';
 import { Link } from '@inertiajs/react';
 import {
     BellIcon,
+    CalendarClockIcon,
     FileTextIcon,
-    SparklesIcon,
     type LucideIcon,
+    SparklesIcon,
 } from 'lucide-react';
 import { type ReactNode } from 'react';
 
@@ -101,6 +102,10 @@ const KINDS: Record<
     achievements_welcome: {
         label: () => __('Achievements'),
         icon: SparklesIcon,
+    },
+    scheduled_transaction: {
+        label: () => __('Upcoming'),
+        icon: CalendarClockIcon,
     },
     other: { label: () => __('Notification'), icon: BellIcon },
 };
