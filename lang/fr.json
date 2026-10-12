@@ -2955,5 +2955,7 @@
     "Re-evaluation complete!": "Réévaluation terminée !",
     ":count transaction(s) updated.": ":count transaction(s) mise(s) à jour.",
     "Re-evaluation queued": "Réévaluation en file d'attente",
-    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Vos transactions seront mises à jour en arrière-plan sous peu. Rechargez la page plus tard pour voir les modifications."
+    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Vos transactions seront mises à jour en arrière-plan sous peu. Rechargez la page plus tard pour voir les modifications.",
+    "Export to CSV": "Exporter en CSV",
+    "Export filtered to CSV": "Exporter la sélection en CSV"
 }

@@ -44,24 +44,10 @@ class TransactionController extends Controller
         $sortColumn = ltrim($sortParam, '-');
         $sortDirection = $descending ? 'desc' : 'asc';
 
-        $filters = array_filter([
-            'date_from' => $validated['date_from'] ?? null,
-            'date_to' => $validated['date_to'] ?? null,
-            'amount_min' => $validated['amount_min'] ?? null,
-            'amount_max' => $validated['amount_max'] ?? null,
-            'category_ids' => $validated['category_ids'] ?? null,
-            'account_ids' => $validated['account_ids'] ?? null,
-            'label_ids' => $validated['label_ids'] ?? null,
-            'creditor_name' => $validated['creditor_name'] ?? null,
-            'debtor_name' => $validated['debtor_name'] ?? null,
-            'category_source' => $validated['category_source'] ?? null,
-            'search' => $validated['search'] ?? null,
-        ], fn ($value) => $value !== null);
-
         $query = Transaction::query()
             ->where('user_id', $user->id)
             ->with(['account.bank', 'category', 'labels', 'categorizedByRule:id,origin'])
-            ->applyFilters($filters);
+            ->applyFilters($request->filters());
 
         $nullableSortColumns = ['creditor_name', 'debtor_name'];
 
