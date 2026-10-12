@@ -49,6 +49,11 @@ vi.mock('./add-transaction-button', () => ({
     ),
 }));
 
+vi.mock('./transfer-dialog', () => ({
+    TransferDialog: ({ open }: { open: boolean }) =>
+        open ? <div data-testid="transfer-dialog" /> : null,
+}));
+
 vi.mock('./transaction-analysis-drawer', () => ({
     TransactionAnalysisDrawer: ({ open }: { open: boolean }) =>
         open ? <div data-testid="analysis-drawer" /> : null,
@@ -245,4 +250,59 @@ describe('TransactionActionsMenu update categories automatically', () => {
             expect(onReEvaluateComplete).not.toHaveBeenCalled();
         },
     );
+});
+
+describe('TransactionActionsMenu transfer', () => {
+    const account = (id: string, type = 'checking') =>
+        ({
+            id,
+            name: id,
+            type,
+            currency_code: 'USD',
+            archived_at: null,
+        }) as never;
+
+    it('is not offered where the accounts are not passed', async () => {
+        renderMenu(emptyFilters);
+
+        const menu = await openMoreActionsMenu();
+
+        expect(
+            within(menu).queryByText('Transfer between accounts'),
+        ).toBeNull();
+    });
+
+    it('needs two accounts that hold transactions', async () => {
+        render(
+            <TransactionActionsMenu
+                transactions={[]}
+                hasTransactionalAccounts
+                filters={emptyFilters}
+                accounts={[account('a'), account('b', 'investment')]}
+            />,
+        );
+
+        const menu = await openMoreActionsMenu();
+
+        expect(
+            within(menu).queryByText('Transfer between accounts'),
+        ).toBeNull();
+    });
+
+    it('is offered with two transactional accounts', async () => {
+        render(
+            <TransactionActionsMenu
+                transactions={[]}
+                hasTransactionalAccounts
+                filters={emptyFilters}
+                accounts={[account('a'), account('b')]}
+            />,
+        );
+
+        const menu = await openMoreActionsMenu();
+
+        expect(
+            within(menu).getByText('Transfer between accounts'),
+        ).toBeInTheDocument();
+    });
 });

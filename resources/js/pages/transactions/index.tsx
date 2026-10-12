@@ -1374,6 +1374,8 @@ export default function Transactions({
                             <div className="flex w-full items-center justify-between gap-2">
                                 <TransactionActionsMenu
                                     transactions={allTransactions}
+                                    accounts={accounts}
+                                    onTransferCreated={refreshTransactions}
                                     hasTransactionalAccounts={
                                         hasTransactionalAccounts
                                     }
