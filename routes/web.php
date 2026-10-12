@@ -269,6 +269,12 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
 
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('transactions/categorize', [TransactionController::class, 'categorize'])->name('transactions.categorize');
+    Route::post('transactions/re-evaluate-rules', [ReEvaluateTransactionRulesController::class, 'bulk'])->name('transactions.re-evaluate-rules.bulk');
+    Route::get('transactions/re-evaluate-rules/status/{jobId}', [ReEvaluateTransactionRulesController::class, 'status'])->name('transactions.re-evaluate-rules.status');
+    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    Route::post('transactions/{transaction}/re-evaluate-rules', [ReEvaluateTransactionRulesController::class, 'single'])->name('transactions.re-evaluate-rules.single');
+    Route::post('transactions/{transaction}/split', [TransactionSplitController::class, 'store'])->name('transactions.split.store');
+    Route::delete('transactions/{transaction}/split', [TransactionSplitController::class, 'destroy'])->name('transactions.split.destroy');
 
     // Scoped: an attachment is only reachable through its own transaction.
     Route::scopeBindings()->group(function () {
@@ -277,13 +283,6 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
         Route::get('transactions/{transaction}/attachments/{attachment}', [TransactionAttachmentController::class, 'show'])->name('transactions.attachments.show');
         Route::delete('transactions/{transaction}/attachments/{attachment}', [TransactionAttachmentController::class, 'destroy'])->name('transactions.attachments.destroy');
     });
-
-    Route::post('transactions/re-evaluate-rules', [ReEvaluateTransactionRulesController::class, 'bulk'])->name('transactions.re-evaluate-rules.bulk');
-    Route::get('transactions/re-evaluate-rules/status/{jobId}', [ReEvaluateTransactionRulesController::class, 'status'])->name('transactions.re-evaluate-rules.status');
-    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-    Route::post('transactions/{transaction}/re-evaluate-rules', [ReEvaluateTransactionRulesController::class, 'single'])->name('transactions.re-evaluate-rules.single');
-    Route::post('transactions/{transaction}/split', [TransactionSplitController::class, 'store'])->name('transactions.split.store');
-    Route::delete('transactions/{transaction}/split', [TransactionSplitController::class, 'destroy'])->name('transactions.split.destroy');
 });
 
 // The bank authorization callback is intentionally unauthenticated: iOS PWAs hand the
