@@ -13,6 +13,7 @@ export interface SerializedFilters {
     creditor_name?: string;
     debtor_name?: string;
     search?: string;
+    category_source?: string;
 }
 
 export function serializeFilters(
@@ -93,4 +94,21 @@ export function filtersFingerprint(filters: SerializedFilters): string {
         debtor_name: filters.debtor_name ?? '',
         search: filters.search ?? '',
     });
+}
+
+/** The serialized filters as the query string the transactions endpoints read. */
+export function buildQueryString(filters: SerializedFilters): string {
+    const params = new URLSearchParams();
+
+    Object.entries(filters).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            if (value.length > 0) {
+                params.set(key, value.join(','));
+            }
+        } else if (value !== undefined && value !== null && value !== '') {
+            params.set(key, String(value));
+        }
+    });
+
+    return params.toString();
 }
