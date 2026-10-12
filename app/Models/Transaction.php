@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $transaction_date
  * @property ?Carbon $source_date
  * @property ?string $split_parent_id
+ * @property ?string $transfer_id
  * @property int|float $total_amount
  * @property TransactionSource $source
  * @property ?CategorySource $category_source
@@ -59,6 +60,7 @@ class Transaction extends Model
         'space_id',
         'account_id',
         'split_parent_id',
+        'transfer_id',
         'category_id',
         'category_source',
         'ai_confidence',
@@ -219,6 +221,22 @@ class Transaction extends Model
         }
 
         $parts->load('splitSiblings:'.self::SPLIT_SIBLING_COLUMNS);
+    }
+
+    /**
+     * The other side of a transfer between the user's own accounts, if this
+     * transaction is one half of such a pair.
+     */
+    public function transferCounterpart(): ?self
+    {
+        if ($this->transfer_id === null) {
+            return null;
+        }
+
+        return self::query()
+            ->where('transfer_id', $this->transfer_id)
+            ->whereKeyNot($this->getKey())
+            ->first();
     }
 
     /**

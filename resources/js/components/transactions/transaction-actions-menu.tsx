@@ -22,6 +22,7 @@ import {
 } from '@/lib/transaction-filter-serialization';
 import { reEvaluateTransactionRules } from '@/lib/transaction-re-evaluation';
 
+import { filterTransactionalAccounts, type Account } from '@/types/account';
 import {
     type ServerTransaction,
     type TransactionFilters,
@@ -29,6 +30,7 @@ import {
 import { __ } from '@/utils/i18n';
 import { Link } from '@inertiajs/react';
 import {
+    ArrowLeftRight,
     BarChart3,
     ChevronDown,
     Download,
@@ -38,6 +40,7 @@ import {
 import { useState, type ReactNode } from 'react';
 import { AddTransactionButton } from './add-transaction-button';
 import { TransactionAnalysisDrawer } from './transaction-analysis-drawer';
+import { TransferDialog } from './transfer-dialog';
 
 interface TransactionActionsMenuProps {
     transactions: ServerTransaction[];
@@ -45,6 +48,12 @@ interface TransactionActionsMenuProps {
     hasTransactionalAccounts: boolean;
     onReEvaluateComplete?: () => void;
     filters: TransactionFilters;
+    /**
+     * The user's accounts. Passing them offers a transfer between two of them,
+     * which only the main transactions page does.
+     */
+    accounts?: Account[];
+    onTransferCreated?: () => void;
 }
 
 /**
@@ -57,11 +66,15 @@ export function TransactionActionsMenu({
     hasTransactionalAccounts,
     onReEvaluateComplete,
     filters,
+    accounts,
+    onTransferCreated,
 }: TransactionActionsMenuProps) {
     const isMobile = useIsMobile();
     const [analysisDrawerOpen, setAnalysisDrawerOpen] = useState(false);
     const [analysisHintOpen, setAnalysisHintOpen] = useState(false);
     const [isReEvaluating, setIsReEvaluating] = useState(false);
+    const [transferOpen, setTransferOpen] = useState(false);
+    const canTransfer = filterTransactionalAccounts(accounts ?? []).length > 1;
 
     const canAnalyze = hasActiveFilters(filters);
 
@@ -221,6 +234,20 @@ export function TransactionActionsMenu({
                             <WandSparkles className="mr-2 h-4 w-4" />
                             {__('Update categories automatically')}
                         </DropdownMenuItem>
+                        {canTransfer && (
+                            <DropdownMenuItem
+                                // Deferred a frame so the dialog does not race
+                                // the menu's own close.
+                                onSelect={() =>
+                                    requestAnimationFrame(() =>
+                                        setTransferOpen(true),
+                                    )
+                                }
+                            >
+                                <ArrowLeftRight className="mr-2 h-4 w-4" />
+                                {__('Transfer between accounts')}
+                            </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem asChild>
                             {/* A plain anchor: this is a file download, not a
                                 page Inertia can visit. */}
@@ -234,6 +261,15 @@ export function TransactionActionsMenu({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </ButtonGroup>
+
+            {accounts && (
+                <TransferDialog
+                    accounts={accounts}
+                    open={transferOpen}
+                    onOpenChange={setTransferOpen}
+                    onCreated={onTransferCreated}
+                />
+            )}
 
             <TransactionAnalysisDrawer
                 open={analysisDrawerOpen}

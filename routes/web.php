@@ -44,6 +44,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionExportController;
 use App\Http\Controllers\TransactionSplitController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UncategorizedPromptController;
 use App\Models\Bank;
 use App\Support\Marketing\ComparisonPages;
@@ -216,6 +217,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Accessible during onboarding for transaction import and categorization
     Route::post('transactions', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::post('transfers', [TransferController::class, 'store'])->name('transfers.store');
     Route::patch('transactions/bulk', [TransactionController::class, 'bulkUpdate'])->name('transactions.bulk-update');
     Route::patch('transactions/{transaction}', [TransactionController::class, 'update'])->name('transactions.update');
 

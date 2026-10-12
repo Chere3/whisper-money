@@ -346,11 +346,15 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        if ($request->boolean('update_balance')) {
-            $balanceAdjuster->reverseDeletedTransaction($transaction);
-        }
+        // A transfer is one movement seen from two accounts: deleting a side
+        // on its own would leave money that left one account and never arrived.
+        foreach (array_filter([$transaction, $transaction->transferCounterpart()]) as $side) {
+            if ($request->boolean('update_balance')) {
+                $balanceAdjuster->reverseDeletedTransaction($side);
+            }
 
-        $transaction->delete();
+            $side->delete();
+        }
 
         return response()->json([
             'message' => 'Transaction deleted successfully',
