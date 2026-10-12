@@ -9,6 +9,10 @@ import MonthlySummaryNotice, {
     type MonthlySummaryNoticeData,
 } from '@/components/dashboard/monthly-summary-notice';
 import { NetWorthChart as NetWorthChartComponent } from '@/components/dashboard/net-worth-chart';
+import {
+    SpendingCalendarCard,
+    type SpendingCalendar,
+} from '@/components/dashboard/spending-calendar-card';
 import { TopCategoriesCard } from '@/components/dashboard/top-categories-card';
 import {
     TopLabelsCard,
@@ -54,6 +58,7 @@ interface DashboardProps extends SharedData {
         is_direct?: boolean;
     }>;
     topLabels?: LabelSpending[];
+    spendingCalendar?: SpendingCalendar;
     cashflowSummary?: {
         current: CashflowSummary;
         previous: CashflowSummary;
@@ -225,6 +230,7 @@ export default function Dashboard() {
                 'creditCardUsage',
                 'topCategories',
                 'topLabels',
+                'spendingCalendar',
                 'cashflowSummary',
             ],
         });
@@ -352,6 +358,16 @@ export default function Dashboard() {
                     <Deferred data="topLabels" fallback={<></>}>
                         <PrivacyRevealScope>
                             <TopLabelsCard labels={props.topLabels ?? []} />
+                        </PrivacyRevealScope>
+                    </Deferred>
+
+                    {/* Same reasoning as the labels card: hidden until there
+                        is spending to draw. */}
+                    <Deferred data="spendingCalendar" fallback={<></>}>
+                        <PrivacyRevealScope>
+                            <SpendingCalendarCard
+                                calendar={props.spendingCalendar ?? null}
+                            />
                         </PrivacyRevealScope>
                     </Deferred>
 

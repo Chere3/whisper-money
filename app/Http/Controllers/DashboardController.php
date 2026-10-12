@@ -8,6 +8,7 @@ use App\Services\AccountMetricsService;
 use App\Services\CashflowSummaryService;
 use App\Services\CategorySpendingService;
 use App\Services\CreditCards\CreditCardStatementService;
+use App\Services\DailySpendingService;
 use App\Services\LabelSpendingService;
 use App\Services\MonthlySummary\ReportPresenter;
 use App\Services\PeriodComparator;
@@ -22,6 +23,7 @@ class DashboardController extends Controller
         private AccountMetricsService $accountMetricsService,
         private CategorySpendingService $categorySpendingService,
         private LabelSpendingService $labelSpendingService,
+        private DailySpendingService $dailySpendingService,
         private CashflowSummaryService $summaries,
         private ReportPresenter $presenter,
         private CreditCardStatementService $creditCardStatementService,
@@ -34,6 +36,7 @@ class DashboardController extends Controller
             'netWorthEvolution' => Inertia::defer(fn () => $this->getNetWorthEvolution($request), 'dashboard'),
             'topCategories' => Inertia::defer(fn () => $this->getTopCategories($request), 'dashboard'),
             'topLabels' => Inertia::defer(fn () => $this->getTopLabels($request), 'dashboard'),
+            'spendingCalendar' => Inertia::defer(fn () => $this->dailySpendingService->calendar($request->user()->id, today()), 'dashboard'),
             'cashflowSummary' => Inertia::defer(fn () => $this->getCashflowSummary($request), 'dashboard'),
             'creditCardUsage' => Inertia::defer(fn () => $this->getCreditCardUsage($request), 'dashboard'),
         ]);
