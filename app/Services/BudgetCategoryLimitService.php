@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Budget;
 use App\Models\BudgetPeriod;
+use App\Models\Category;
 
 /**
  * Spending limits a budget sets on its tracked categories, on top of the
@@ -50,11 +51,15 @@ class BudgetCategoryLimitService
         }
 
         return $categories
-            ->map(fn ($category): array => [
-                'category_id' => $category->id,
-                'limit_amount' => $category->pivot->limit_amount === null ? null : (int) $category->pivot->limit_amount,
-                'spent' => $spent[$category->id],
-            ])
+            ->map(function (Category $category) use ($spent): array {
+                $limit = $category->getRelationValue('pivot')?->getAttribute('limit_amount');
+
+                return [
+                    'category_id' => $category->id,
+                    'limit_amount' => $limit === null ? null : (int) $limit,
+                    'spent' => $spent[$category->id],
+                ];
+            })
             ->values()
             ->all();
     }
