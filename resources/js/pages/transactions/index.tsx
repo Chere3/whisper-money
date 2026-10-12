@@ -95,6 +95,10 @@ import {
     mergeReEvaluatedTransaction,
     reEvaluateTransactionRules,
 } from '@/lib/transaction-re-evaluation';
+import {
+    withoutDeleted,
+    withoutTransferDuplicates,
+} from '@/lib/transaction-removal';
 import { getTransactionRowActions } from '@/lib/transaction-row-actions';
 import { isSplitPart } from '@/lib/transaction-splits';
 import { cn } from '@/lib/utils';
@@ -1095,9 +1099,7 @@ export default function Transactions({
                     manualAccountIds.has(deleteTransaction.account_id),
             });
             setAllTransactions((previous) =>
-                previous.filter(
-                    (transaction) => transaction.id !== deleteTransaction.id,
-                ),
+                withoutDeleted(previous, [deleteTransaction.id]),
             );
             setDeleteTransaction(null);
             setIsBulkDeleteMode(false);
@@ -1247,14 +1249,15 @@ export default function Transactions({
 
         setIsBulkDeleting(true);
         try {
-            await transactionSyncService.deleteMany(selectedIds, {
-                updateBalance:
-                    updateBalanceOnDelete && bulkDeleteTouchesManualAccount,
-            });
+            await transactionSyncService.deleteMany(
+                withoutTransferDuplicates(allTransactions, selectedIds),
+                {
+                    updateBalance:
+                        updateBalanceOnDelete && bulkDeleteTouchesManualAccount,
+                },
+            );
             setAllTransactions((previous) =>
-                previous.filter(
-                    (transaction) => !selectedIds.includes(transaction.id),
-                ),
+                withoutDeleted(previous, selectedIds),
             );
             setDeleteTransaction(null);
             setIsBulkDeleteMode(false);

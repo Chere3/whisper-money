@@ -1,6 +1,10 @@
 import { useLocale } from '@/hooks/use-locale';
 import { useBalanceOwningAccountIds } from '@/hooks/use-owns-balance-updates';
 import { reloadPage } from '@/lib/leave-page';
+import {
+    withoutDeleted,
+    withoutTransferDuplicates,
+} from '@/lib/transaction-removal';
 import { getTransactionRowActions } from '@/lib/transaction-row-actions';
 import { isSplitPart } from '@/lib/transaction-splits';
 import { __ } from '@/utils/i18n';
@@ -845,9 +849,7 @@ export function TransactionList({
             }
             onTransactionsChanged?.();
             setTransactions((previous) =>
-                previous.filter(
-                    (transaction) => transaction.id !== deleteTransaction.id,
-                ),
+                withoutDeleted(previous, [deleteTransaction.id]),
             );
             setDeleteTransaction(null);
             setIsBulkDeleteMode(false);
@@ -975,17 +977,16 @@ export function TransactionList({
                     manualAccountIds.has(transaction.account_id),
             );
         try {
-            await transactionSyncService.deleteMany(selectedIds, {
-                updateBalance: balanceMayHaveUpdated,
-            });
+            await transactionSyncService.deleteMany(
+                withoutTransferDuplicates(transactions, selectedIds),
+                { updateBalance: balanceMayHaveUpdated },
+            );
             if (balanceMayHaveUpdated) {
                 onBalanceUpdated?.();
             }
             onTransactionsChanged?.();
             setTransactions((previous) =>
-                previous.filter(
-                    (transaction) => !selectedIds.includes(transaction.id),
-                ),
+                withoutDeleted(previous, selectedIds),
             );
             setDeleteTransaction(null);
             setIsBulkDeleteMode(false);

@@ -32,6 +32,8 @@ export interface Transaction {
     split_parent_id?: UUID | null;
     /** Every part of the same split, this one included. Loaded where the table needs it. */
     split_siblings?: TransactionSplitSibling[];
+    /** Shared by the two sides of a transfer between the user's own accounts. */
+    transfer_id?: UUID | null;
     category_id: UUID | null;
     description: string;
     transaction_date: string;
