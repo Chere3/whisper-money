@@ -15,6 +15,11 @@ vi.mock('@/components/shared/label-combobox', () => ({
     LabelCombobox: () => <div />,
 }));
 
+// The attachments load and save on their own; they have their own test.
+vi.mock('@/components/transactions/transaction-attachments', () => ({
+    TransactionAttachments: () => null,
+}));
+
 vi.mock('@/components/transactions/category-select', () => ({
     // Stands in for the combobox: it reports what it holds and offers every
     // category as a button, so a pick is one click.

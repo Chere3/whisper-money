@@ -4,6 +4,7 @@ import { LabelCombobox } from '@/components/shared/label-combobox';
 import { Shortcut } from '@/components/shortcuts/shortcut';
 import { ShortcutKbd } from '@/components/shortcuts/shortcut-kbd';
 import { CategorySelect } from '@/components/transactions/category-select';
+import { TransactionAttachments } from '@/components/transactions/transaction-attachments';
 import { AmountInput } from '@/components/ui/amount-input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -1559,6 +1560,12 @@ export function EditTransactionDialog({
                         {!isMinimal && organizeFields}
 
                         {!isMinimal && notesField}
+
+                        {mode === 'edit' && transaction && (
+                            <TransactionAttachments
+                                transactionId={transaction.id}
+                            />
+                        )}
 
                         {mode === 'create' && moreOptionsTrigger}
                     </div>

@@ -223,6 +223,12 @@ class Transaction extends Model
         $parts->load('splitSiblings:'.self::SPLIT_SIBLING_COLUMNS);
     }
 
+    /** @return HasMany<TransactionAttachment, $this> */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(TransactionAttachment::class);
+    }
+
     /**
      * The other side of a transfer between the user's own accounts, if this
      * transaction is one half of such a pair.

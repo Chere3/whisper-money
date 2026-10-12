@@ -42,6 +42,7 @@ use App\Http\Controllers\SavingsGoalController;
 use App\Http\Controllers\ScheduledTransactionController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TransactionAttachmentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionExportController;
 use App\Http\Controllers\TransactionSplitController;
@@ -280,6 +281,14 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
     Route::post('transactions/{transaction}/re-evaluate-rules', [ReEvaluateTransactionRulesController::class, 'single'])->name('transactions.re-evaluate-rules.single');
     Route::post('transactions/{transaction}/split', [TransactionSplitController::class, 'store'])->name('transactions.split.store');
     Route::delete('transactions/{transaction}/split', [TransactionSplitController::class, 'destroy'])->name('transactions.split.destroy');
+
+    // Scoped: an attachment is only reachable through its own transaction.
+    Route::scopeBindings()->group(function () {
+        Route::get('transactions/{transaction}/attachments', [TransactionAttachmentController::class, 'index'])->name('transactions.attachments.index');
+        Route::post('transactions/{transaction}/attachments', [TransactionAttachmentController::class, 'store'])->name('transactions.attachments.store');
+        Route::get('transactions/{transaction}/attachments/{attachment}', [TransactionAttachmentController::class, 'show'])->name('transactions.attachments.show');
+        Route::delete('transactions/{transaction}/attachments/{attachment}', [TransactionAttachmentController::class, 'destroy'])->name('transactions.attachments.destroy');
+    });
 });
 
 // The bank authorization callback is intentionally unauthenticated: iOS PWAs hand the
