@@ -1,4 +1,5 @@
 import { categorize } from '@/actions/App/Http/Controllers/TransactionController';
+import exportTransactions from '@/actions/App/Http/Controllers/TransactionExportController';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import {
@@ -14,7 +15,11 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { hasActiveFilters } from '@/lib/transaction-filter-serialization';
+import {
+    buildQueryString,
+    hasActiveFilters,
+    serializeFilters,
+} from '@/lib/transaction-filter-serialization';
 import { reEvaluateTransactionRules } from '@/lib/transaction-re-evaluation';
 
 import { filterTransactionalAccounts, type Account } from '@/types/account';
@@ -28,6 +33,7 @@ import {
     ArrowLeftRight,
     BarChart3,
     ChevronDown,
+    Download,
     Tags,
     WandSparkles,
 } from 'lucide-react';
@@ -92,6 +98,16 @@ export function TransactionActionsMenu({
             setIsReEvaluating(false);
         }
     };
+
+    // The export takes the filters on screen, so the file holds the rows the
+    // table is showing rather than the whole history.
+    const exportQuery = buildQueryString({
+        ...serializeFilters(filters),
+        ...(filters.aiCategorizedOnly && { category_source: 'ai' }),
+    });
+    const exportUrl = exportQuery
+        ? `${exportTransactions.url()}?${exportQuery}`
+        : exportTransactions.url();
 
     const uncategorizedCount = transactions.filter(
         (t) => !t.category_id,
@@ -232,6 +248,16 @@ export function TransactionActionsMenu({
                                 {__('Transfer between accounts')}
                             </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem asChild>
+                            {/* A plain anchor: this is a file download, not a
+                                page Inertia can visit. */}
+                            <a href={exportUrl} download>
+                                <Download className="mr-2 h-4 w-4" />
+                                {canAnalyze
+                                    ? __('Export filtered to CSV')
+                                    : __('Export to CSV')}
+                            </a>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </ButtonGroup>

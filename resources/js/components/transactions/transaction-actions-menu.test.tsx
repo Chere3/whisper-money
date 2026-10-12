@@ -18,6 +18,10 @@ vi.mock('@/actions/App/Http/Controllers/TransactionController', () => ({
     categorize: { url: () => '/transactions/categorize' },
 }));
 
+vi.mock('@/actions/App/Http/Controllers/TransactionExportController', () => ({
+    default: { url: () => '/transactions/export' },
+}));
+
 let isMobile = false;
 
 vi.mock('@/hooks/use-mobile', () => ({
@@ -195,7 +199,11 @@ describe('TransactionActionsMenu action bar layout', () => {
             [...menu.querySelectorAll('[role="menuitem"]')].map(
                 (item) => item.textContent,
             ),
-        ).toEqual(['Categorize2', 'Update categories automatically']);
+        ).toEqual([
+            'Categorize2',
+            'Update categories automatically',
+            'Export to CSV',
+        ]);
         expect(
             within(menu).getByText('Categorize').closest('a'),
         ).toHaveAttribute('href', '/transactions/categorize');
@@ -250,6 +258,37 @@ describe('TransactionActionsMenu update categories automatically', () => {
             expect(onReEvaluateComplete).not.toHaveBeenCalled();
         },
     );
+});
+
+describe('TransactionActionsMenu export', () => {
+    it('links to the export of the whole history when nothing is filtered', async () => {
+        renderMenu(emptyFilters);
+
+        const menu = await openMoreActionsMenu();
+        const link = within(menu).getByText('Export to CSV').closest('a')!;
+
+        expect(link).toHaveAttribute('href', '/transactions/export');
+        expect(link).toHaveAttribute('download');
+    });
+
+    it('carries the filters on screen into the export', async () => {
+        renderMenu({
+            ...emptyFilters,
+            labelIds: ['label-1', 'label-2'],
+            searchText: 'coffee',
+            aiCategorizedOnly: true,
+        });
+
+        const menu = await openMoreActionsMenu();
+        const link = within(menu)
+            .getByText('Export filtered to CSV')
+            .closest('a')!;
+
+        expect(link).toHaveAttribute(
+            'href',
+            '/transactions/export?label_ids=label-1%2Clabel-2&search=coffee&category_source=ai',
+        );
+    });
 });
 
 describe('TransactionActionsMenu transfer', () => {

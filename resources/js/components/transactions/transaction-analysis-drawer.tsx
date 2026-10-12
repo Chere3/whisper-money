@@ -25,6 +25,7 @@ import { useChartColors } from '@/hooks/use-chart-color-scheme';
 import { useExpandableCategories } from '@/hooks/use-expandable-categories';
 import { useLocale } from '@/hooks/use-locale';
 import {
+    buildQueryString,
     filtersFingerprint,
     serializeFilters,
     type SerializedFilters,
@@ -416,22 +417,6 @@ interface TransactionAnalysisDrawerProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     filters: TransactionFilters;
-}
-
-function buildQueryString(filters: SerializedFilters): string {
-    const params = new URLSearchParams();
-
-    Object.entries(filters).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-            if (value.length > 0) {
-                params.set(key, value.join(','));
-            }
-        } else if (value !== undefined && value !== null && value !== '') {
-            params.set(key, String(value));
-        }
-    });
-
-    return params.toString();
 }
 
 interface SavedFilterSummary {
