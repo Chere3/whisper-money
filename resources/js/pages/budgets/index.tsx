@@ -7,6 +7,7 @@ import { CreateBudgetDialog } from '@/components/budgets/create-budget-dialog';
 import HeadingSmall from '@/components/heading-small';
 import { CreateSavingsGoalDialog } from '@/components/savings-goals/create-savings-goal-dialog';
 import { SavingsGoalListCard } from '@/components/savings-goals/savings-goal-list-card';
+import { UpcomingTransactions } from '@/components/scheduled-transactions/upcoming-transactions';
 import { CreatePlaceholderCard } from '@/components/shared/create-placeholder-card';
 import { PlanningReorderDialog } from '@/components/shared/planning-reorder-dialog';
 import { Button } from '@/components/ui/button';
@@ -31,8 +32,11 @@ import {
     PlanningItem,
 } from '@/lib/planning-items';
 import { BreadcrumbItem } from '@/types';
+import { Account } from '@/types/account';
 import { Budget } from '@/types/budget';
+import { Category } from '@/types/category';
 import { SavingsGoal } from '@/types/savings-goal';
+import { ScheduledTransaction } from '@/types/scheduled-transaction';
 import { __ } from '@/utils/i18n';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ChevronDown, ChevronRight, Pencil, Plus } from 'lucide-react';
@@ -56,12 +60,18 @@ export function budgetTypeFilterFromUrl(url: string): BudgetTypeFilter {
 interface Props {
     budgets: Budget[];
     savingsGoals?: SavingsGoal[];
+    scheduledTransactions?: ScheduledTransaction[];
+    accounts?: Account[];
+    categories?: Category[];
     currencyCode: string;
 }
 
 export default function BudgetsIndex({
     budgets,
     savingsGoals = [],
+    scheduledTransactions = [],
+    accounts = [],
+    categories = [],
     currencyCode,
 }: Props) {
     const [createType, setCreateType] = useState<'budget' | 'goal' | null>(
@@ -232,6 +242,12 @@ export default function BudgetsIndex({
                         onCreate={setCreateType}
                     />
                 </div>
+
+                <UpcomingTransactions
+                    scheduledTransactions={scheduledTransactions}
+                    accounts={accounts}
+                    categories={categories}
+                />
 
                 {archivedItems.length > 0 && (
                     <Collapsible

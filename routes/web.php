@@ -38,6 +38,7 @@ use App\Http\Controllers\ReEvaluateTransactionRulesController;
 use App\Http\Controllers\RoadmapController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SavingsGoalController;
+use App\Http\Controllers\ScheduledTransactionController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TransactionController;
@@ -327,6 +328,12 @@ Route::middleware(['auth', 'verified', 'onboarded', 'subscribed'])->group(functi
     Route::delete('budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
     Route::post('budgets/{budget}/archive', [BudgetController::class, 'archive'])->name('budgets.archive');
     Route::patch('planning/reorder', [BudgetController::class, 'reorder'])->name('planning.reorder');
+
+    Route::post('scheduled-transactions', [ScheduledTransactionController::class, 'store'])->name('scheduled-transactions.store');
+    Route::put('scheduled-transactions/{scheduledTransaction}', [ScheduledTransactionController::class, 'update'])->name('scheduled-transactions.update');
+    Route::delete('scheduled-transactions/{scheduledTransaction}', [ScheduledTransactionController::class, 'destroy'])->name('scheduled-transactions.destroy');
+    Route::post('scheduled-transactions/{scheduledTransaction}/pay', [ScheduledTransactionController::class, 'pay'])->name('scheduled-transactions.pay');
+    Route::post('scheduled-transactions/{scheduledTransaction}/skip', [ScheduledTransactionController::class, 'skip'])->name('scheduled-transactions.skip');
 
     Route::post('savings-goals', [SavingsGoalController::class, 'store'])->name('savings-goals.store');
     Route::get('savings-goals/{savingsGoal}', [SavingsGoalController::class, 'show'])->name('savings-goals.show');
