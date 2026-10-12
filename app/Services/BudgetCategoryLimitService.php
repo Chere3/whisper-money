@@ -25,7 +25,7 @@ class BudgetCategoryLimitService
      */
     public function breakdown(Budget $budget, BudgetPeriod $period): array
     {
-        $categories = $budget->categories()->get();
+        $categories = $budget->loadMissing('categories')->categories;
 
         if ($categories->isEmpty()) {
             return [];
