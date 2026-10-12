@@ -163,6 +163,7 @@
     "Bring it. We'll import it in a minute": "Apportez-le. Nous l'importons dans une minute",
     "Every euro already filed when you arrive": "Chaque euro déjà classé à votre arrivée",
     "Export it and we'll take it from there": "Exportez-le et nous prenons le relais",
+    "Export to CSV": "Exporter en CSV",
     "Find out where your money actually went": "Découvrez où votre argent est vraiment passé",
     "Forty seconds at your bank's own login, read-only.": "Quarante secondes sur la connexion de votre propre banque, en lecture seule.",
     "Three questions first. They change what you see.": "D'abord trois questions. Elles changent ce que vous verrez.",
@@ -963,6 +964,7 @@
     "Expires": "Gagner",
     "Export": "Exporter",
     "Export Data": "Exporter des données",
+    "Export filtered to CSV": "Exporter la sélection en CSV",
     "Export a CSV or XLS from your bank and drag it in. A year's worth of transactions imported in under 10 seconds.": "Exportez un CSV ou XLS depuis votre banque et faites-le glisser ici. Un an de transactions importées en moins de 10 secondes.",
     "Export from any bank": "Exporter depuis n'importe quelle banque",
     "Failed to apply rule to transactions.": "La règle n'a pas pu être appliquée aux transactions.",
@@ -2955,7 +2957,5 @@
     "Re-evaluation complete!": "Réévaluation terminée !",
     ":count transaction(s) updated.": ":count transaction(s) mise(s) à jour.",
     "Re-evaluation queued": "Réévaluation en file d'attente",
-    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Vos transactions seront mises à jour en arrière-plan sous peu. Rechargez la page plus tard pour voir les modifications.",
-    "Export to CSV": "Exporter en CSV",
-    "Export filtered to CSV": "Exporter la sélection en CSV"
+    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Vos transactions seront mises à jour en arrière-plan sous peu. Rechargez la page plus tard pour voir les modifications."
 }
