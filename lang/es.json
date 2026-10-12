@@ -3885,5 +3885,12 @@
     "Re-evaluation complete!": "¡Reevaluación completada!",
     ":count transaction(s) updated.": ":count movimiento(s) actualizado(s).",
     "Re-evaluation queued": "Reevaluación en cola",
-    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Tus movimientos se actualizarán en segundo plano en breve. Recarga la página más tarde para ver los cambios."
+    "Your transactions will be updated in the background shortly. Reload the page later to see the changes.": "Tus movimientos se actualizarán en segundo plano en breve. Recarga la página más tarde para ver los cambios.",
+    "Category limits": "Límites por categoría",
+    "How much each tracked category has spent in this period.": "Cuánto ha gastado cada categoría en este periodo.",
+    "Edit limits": "Editar límites",
+    "Set limits": "Fijar límites",
+    "No limit": "Sin límite",
+    "Cap what each category can spend per period. Leave a category empty to only count it against the budget total.": "Limita lo que cada categoría puede gastar por periodo. Deja una categoría vacía para que solo cuente contra el total del presupuesto.",
+    "Save limits": "Guardar límites"
 }

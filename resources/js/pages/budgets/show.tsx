@@ -1,5 +1,6 @@
 import { index, show } from '@/actions/App/Http/Controllers/BudgetController';
 import { ArchiveBudgetDialog } from '@/components/budgets/archive-budget-dialog';
+import { BudgetCategoryLimits } from '@/components/budgets/budget-category-limits';
 import { BudgetPeriodNavigation } from '@/components/budgets/budget-period-navigation';
 import { BudgetSpendingChart } from '@/components/budgets/budget-spending-chart';
 import { DeleteBudgetDialog } from '@/components/budgets/delete-budget-dialog';
@@ -21,7 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { BreadcrumbItem } from '@/types';
 import { Account, Bank } from '@/types/account';
-import { Budget, BudgetPeriod } from '@/types/budget';
+import { Budget, BudgetCategoryLimit, BudgetPeriod } from '@/types/budget';
 import { Category } from '@/types/category';
 import { Label } from '@/types/label';
 import { __ } from '@/utils/i18n';
@@ -34,6 +35,7 @@ interface Props {
     currentPeriod: BudgetPeriod;
     previousPeriod: BudgetPeriod | null;
     nextPeriod: BudgetPeriod | null;
+    categoryLimits: BudgetCategoryLimit[];
     categories: Category[];
     accounts: Account[];
     banks: Bank[];
@@ -46,6 +48,7 @@ export default function BudgetShow({
     currentPeriod,
     previousPeriod,
     nextPeriod,
+    categoryLimits,
     categories,
     accounts,
     banks,
@@ -209,6 +212,12 @@ export default function BudgetShow({
                     currentPeriod={currentPeriod}
                     previousPeriod={previousPeriod}
                     budgetName={budget.name}
+                    currencyCode={currencyCode}
+                />
+
+                <BudgetCategoryLimits
+                    budget={budget}
+                    categoryLimits={categoryLimits}
                     currencyCode={currencyCode}
                 />
 

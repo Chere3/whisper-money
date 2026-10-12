@@ -47,6 +47,16 @@ export interface BudgetCategory {
     updated_at: string;
 }
 
+/**
+ * A tracked category's spending in one period, next to the limit it carries
+ * inside the budget. `limit_amount` is null when the category has no limit.
+ */
+export interface BudgetCategoryLimit {
+    category_id: UUID;
+    limit_amount: number | null;
+    spent: number;
+}
+
 export interface BudgetLabel {
     id: UUID;
     budget_id: UUID;
@@ -136,8 +146,11 @@ export type BudgetSeverity = 'over' | 'near' | 'ok';
  * list can never disagree with the colour the user is looking at.
  */
 export function budgetSeverity(budget: Budget): BudgetSeverity {
-    const used = budgetPercentageUsed(budget);
+    return severityForPercentage(budgetPercentageUsed(budget));
+}
 
+/** The same thresholds, for anything measured against a limit. */
+export function severityForPercentage(used: number): BudgetSeverity {
     if (used >= 100) {
         return 'over';
     }

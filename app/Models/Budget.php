@@ -69,7 +69,7 @@ class Budget extends Model
     /** @return BelongsToMany<Category, $this> */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class)->withPivot('limit_amount');
     }
 
     /** @return BelongsToMany<Label, $this> */
