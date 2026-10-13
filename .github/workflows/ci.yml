@@ -450,7 +450,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     needs: [tests, linter, static-analysis, performance-tests, changes]
-    if: ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch') && needs.changes.outputs.code == 'true'
+    # Fork: the image is built and published by the upstream repository only
+    # (no Sentry secrets here).
+    if: github.repository == 'whisper-money/whisper-money' && ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch') && needs.changes.outputs.code == 'true'
     outputs:
       development-digest: ${{ steps.development-image.outputs.digest }}
       production-digest: ${{ steps.production-image.outputs.digest }}
